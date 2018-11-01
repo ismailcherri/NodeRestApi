@@ -11,14 +11,10 @@ const StringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
 
 // Creates HTTP server
-const httpServer = http.createServer(function(req, res){
-    unifiedServer(req, res);
-});
+const httpServer = http.createServer((req, res) => unifiedServer(req, res));
 
 // Starts listening on the port from configuration
-httpServer.listen(config.httpPort, function(){
-    console.log('The server is listening on port ' + config.httpPort + ' as ' + config.envName);
-});
+httpServer.listen(config.httpPort, () => console.log('The server is listening on port ' + config.httpPort + ' as ' + config.envName));
 
 // HTTPS server options
 const httpsServerOptions = {
@@ -27,17 +23,13 @@ const httpsServerOptions = {
 };
 
 // Creates the HTTPS server
-const httpsServer = https.createServer(httpsServerOptions, function(req, res){
-    unifiedServer(req, res);
-});
+const httpsServer = https.createServer(httpsServerOptions, (req, res) => unifiedServer(req, res));
 
 // Starts listening on the port from configuration
-httpsServer.listen(config.httpsPort, function(){
-    console.log('The server is listening on port ' + config.httpsPort + ' as ' + config.envName);
-});
+httpsServer.listen(config.httpsPort, () => console.log('The server is listening on port ' + config.httpsPort + ' as ' + config.envName));
 
 // A common entry point for both HTTP and HTTPS server
-const unifiedServer = function(req, res){
+const unifiedServer = (req, res) => {
     //Get the url and parse it
     const parsedUrl = url.parse(req.url, true);
 
@@ -62,7 +54,7 @@ const unifiedServer = function(req, res){
     });
 
     // Listener for the end event on the request
-    req.on('end', function () {
+    req.on('end', () => {
         payload += decoder.end();
 
         // Gets the correct handler
@@ -78,7 +70,7 @@ const unifiedServer = function(req, res){
         };
 
         // Executes the handler
-        chosenHandler(data, function(statusCode, payload){
+        chosenHandler(data, (statusCode, payload) => {
             // Use the status code called back by the handler or defaults to 200
             statusCode = typeof(statusCode) === 'number' ? statusCode : 200;
 
@@ -103,14 +95,14 @@ const unifiedServer = function(req, res){
 const handlers = {};
 
 //Hello handler
-handlers.hello = function(data, callback){
+handlers.hello = (data, callback) => {
     callback(200, {
         'message': 'Hello World from Node.js!'
     });
 };
 
 //Not found handler
-handlers.notFound = function(data, callback){
+handlers.notFound = (data, callback) => {
     callback(404, {
         'message': 'Route not found!'
     })
