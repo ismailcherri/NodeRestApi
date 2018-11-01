@@ -7,6 +7,7 @@ A small RESTful API built using Node.js only modules
 
 ## Installation
 - Clone this repository
+- create a https folder under this project: `$ mkdir https`
 - Go to https folder `$ cd https`
 - Create your HTTPS certificates with this command:  
  
